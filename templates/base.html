@@ -15,11 +15,6 @@
     <!-- Custom css -->
     <link rel="stylesheet" href="{% static 'style.css' %}">
 
-    <!-- dropzone -->
-      {% comment %} <link rel="stylesheet" href="{% static 'dropzone.css' %}">
-    <script src="{% static 'dropzone.js' %}" defer></script>
-      {% endcomment %}
-
     <!-- Custom js -->
     <script src="{% static 'functions.js' %}" defer></script>
     {% block scripts %}
@@ -28,7 +23,6 @@
     <title>read posts | {% block title %}{% endblock title %}</title>
   </head>
   <body>
-   {% comment %} {% include "navbar.html" %} {% endcomment %}
     <div class="container mt-3">
         {% block content %}
         {% endblock content %}
