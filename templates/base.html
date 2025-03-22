@@ -27,7 +27,8 @@
     <title>read posts | {% block title %}{% endblock title %}</title>
   </head>
   <body>
-    <div class="container mt-3">
+    {% include "navbar.html" %}
+    <div class="container mt-3 mb-3">
         {% block content %}
         {% endblock content %}
     </div>
