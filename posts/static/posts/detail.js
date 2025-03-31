@@ -1,4 +1,3 @@
-console.log('hello world detail')
 const postBox = document.getElementById('post-box')
 const alertBox = document.getElementById('alert-box')
 const backBtn = document.getElementById('back-btn')
