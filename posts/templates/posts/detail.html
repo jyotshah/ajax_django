@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block scripts %}
+    <script src="{% static 'posts/detail.js' %}" defer></script>
+{% endblock scripts %}
+
+{% block title %}{{obj.title}} detail{% endblock title %}
+
+{% block content %}
+<div class="container mt-4" >
+    <div class="row">
+        <div class="col-md-8">
+            <div class="mt-1" id="post-box"></div>
+
+            <!--carousel-->
+            {% if obj.get_photos %}
+            <div id="carouselExampleControls" class="carousel slide mb-3 shadow-sm rounded" data-bs-ride="carousel" style="max-width: 100%; height: 400px;">
+                <div class="carousel-inner">
+                    {% for p in obj.get_photos %}
+                        <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">
+                            <img src="{{p.image.url}}" class="d-block w-100 rounded" alt="photo {{obj.pk}}" style="height: 400px; object-fit: cover; border-radius: 10px;">
+                        </div>
+                    {% endfor %}
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+            {% else %}
+                <div class="mt-2 mb-2 alert alert-info">No more photos to show...</div>
+            {% endif %}
+
+            <div class="btn-group mt-3">
+                <a href="{% url 'posts:main-board' %}" id="back-btn" class="btn btn-info px-4 py-2">back</a>
+                <button id="update-btn" class="btn btn-success px-4 py-2 not-visible" data-bs-toggle="modal" data-bs-target="#updateModal">update</button>
+                <button id="delete-btn" class="btn btn-danger px-4 py-2 not-visible" data-bs-toggle="modal" data-bs-target="#deleteModal">delete</button>
+            </div>
+
+            <div id="spinner-box" class="text-center mt-5 mb-4">
+                <div class="spinner-border text-secondary" role="status"></div>
+            </div>
+
+            <!-- Update Modal -->
+            <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Update Post</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="alert-box"></div>
+                            <form id="update-form">
+                                {% csrf_token %}
+                                {{form|crispy}}
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-success">Update</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delete Modal -->
+            <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Delete Post</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure, you want to delete <b>"{{obj.title}}"</b> ?
+                        </div>
+                        <div class="modal-footer">
+                            <form id="delete-form">
+                                {% csrf_token %}
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-success">delete</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        {% endblock content %}
