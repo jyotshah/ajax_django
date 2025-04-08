@@ -54,6 +54,7 @@ def load_post_data_view(request, num_posts):
 
             qs = Post.objects.all()
             data = []
+
             for obj in qs:
                   item = {
                         'id': obj.id,
@@ -61,7 +62,8 @@ def load_post_data_view(request, num_posts):
                         'description': obj.description,
                         'liked': True if request.user in obj.liked.all() else False,
                         'count': obj.like_count,
-                        'author': obj.author.user.username
+                        'author': obj.author.user.username,
+                        'liked_users': [user.username for user in obj.liked.all()]
                   }
                   data.append(item)
             return JsonResponse({'data':data[lower:upper], 'size': size })
@@ -76,6 +78,8 @@ def post_detail_data_view(request, pk):
                   'description': obj.description,
                   'author': obj.author.user.username,
                   'logged_in': request.user.username,
+                  'liked_users': [user.username for user in obj.liked.all()],
+
             }
             return JsonResponse({'data': data})
       return redirect('posts:main-board')
