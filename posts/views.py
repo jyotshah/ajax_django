@@ -35,11 +35,13 @@ def post_list_and_create(request):
 @login_required
 def post_detail(request, pk):
       obj = Post.objects.get(pk=pk)
+      liked_users = [user.username for user in obj.liked.all()]
       form = PostForm()
 
       context = {
             'obj': obj,
             'form': form,
+            'liked_users': liked_users,
       }
 
       return render(request, 'posts/detail.html', context)
@@ -62,7 +64,7 @@ def load_post_data_view(request, num_posts):
                         'description': obj.description,
                         'liked': True if request.user in obj.liked.all() else False,
                         'count': obj.like_count,
-                        'author': obj.author.user.username,
+                        'author': obj.author.   user.username,
                         'liked_users': [user.username for user in obj.liked.all()]
                   }
                   data.append(item)

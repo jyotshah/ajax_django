@@ -67,20 +67,6 @@ const likeUnlikePosts = ()=> {
 
 let visible = 3
 
-const initializePopovers = () => {
-    const likeButtons = document.querySelectorAll('.like-btn');
-    likeButtons.forEach((button) => {
-        const likedUsers = button.getAttribute('data-liked-users');
-        const content = likedUsers ? 'Liked by ' + likedUsers : 'No likes yet';
-        
-        new bootstrap.Popover(button, {
-            trigger: 'hover',
-            content: content,
-            placement: 'top',
-        });
-    });
-};
-
 const getData = () => {
     $.ajax({
         type: 'GET',
@@ -88,17 +74,15 @@ const getData = () => {
         success: function(response){
             console.log(response)
             const data = response.data
-                setTimeout(()=>{
-                spinnerBox.classList.add('not-visible')
-                console.log(data)
-                data.forEach(el => {
-                const likedUsersText = ''
+            setTimeout(()=>{
+            spinnerBox.classList.add('not-visible')
+            console.log(data)
+            data.forEach(el => {
                 postsBox.innerHTML += `
                     <div class="card mb-2">
                         <div class="card-body">
                             <h5 class="card-title">${el.title}</h5>
                             <p class="card-text">${el.description}</p>
-                            <p class="text-muted"><small>${likedUsersText}</small></p>
                         </div>
                         <div class="card-footer">
                             <div class="row">
@@ -107,19 +91,15 @@ const getData = () => {
                                 </div>
                                 <div class="col-2">
                                 <form class="like-unlike-forms" data-form-id="${el.id}">
-                                    <button class="btn btn-primary like-btn" id="like-unlike-${el.id}" 
-                                        data-liked-users="${el.liked_users.join(', ')}">
-                                        ${el.liked ? `Unlike (${el.count})` : `Like (${el.count})`}
-                                    </button>
+                                    <button class="btn btn-primary" id="like-unlike-${el.id}">${el.liked ? `Unlike (${el.count})`: `Like (${el.count})`}</button>
                                 </form>
+                                    </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 `
             });
             likeUnlikePosts()
-            initializePopovers()
             }, 100)
             console.log(response.size)
             if (response.size == 0) {
@@ -207,7 +187,7 @@ const myDropzone = new Dropzone('#my-dropzone', {
     url:'upload/',
     init: function() {
         this.on('sending', function(file, xhr, formData){
-            formData.append('csfrmiddlewaretoken', csrftoken)
+            formData.append('csrfmiddlewaretoken', csrftoken)
             formData.append('new_post_id', newPostId)
         })
     },
